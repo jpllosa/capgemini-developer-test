@@ -31,88 +31,34 @@ public class ShoppingCart {
 	public BigDecimal checkout() {
 		BigDecimal total = new BigDecimal("0.00");
 
-		total = total.add(totalApples());
-		total = total.add(totalOranges());
+		for (String item : items) {
+			total = total.add(priceList.get(item));
+		}		
 		
-//		for (String item : items) {
-//			total = total.add(priceList.get(item));
-//		}		
-//		
-//		total = total.subtract(discount("apple", 2, new BigDecimal("1")));
-//		total = total.subtract(discount("orange", 3, new BigDecimal("2")));
+		total = total.subtract(discount("apple", 2, new BigDecimal("0.60")));
+		total = total.subtract(discount("orange", 3, new BigDecimal("0.25")));
 		
 		return total;
 	}
 	
-//	private BigDecimal discount(String product, int grouping, BigDecimal multiplier) {
-//		BigDecimal total = new BigDecimal("0.00");
-//		int products = 0;
-//		for (String item : items) {
-//			if (item.equals(product)) {
-//				products++;
-//			}
-//		}
-//		
-//		if (products == 0) return total;
-//		
-//		int pairs = products / grouping;
-//		
-//		BigDecimal productPrice = priceList.get("apple");
-//		productPrice = productPrice.multiply(multiplier);
-//		
-//		for (int i = 0; i < pairs; i++) {
-//			total = total.add(productPrice);
-//		}
-//		
-//		return total;
-//		
-//	}
-	
-	private BigDecimal totalApples() {
+	private BigDecimal discount(String product, int grouping, BigDecimal priceDiscount) {
 		BigDecimal total = new BigDecimal("0.00");
-		int numberOfApples = 0;
+		int products = 0;
 		for (String item : items) {
-			if (item.equals("apple")) {
-				numberOfApples++;
+			if (item.equals(product)) {
+				products++;
 			}
 		}
 		
-		if (numberOfApples == 0) return total;
+		if (products == 0) return total;
 		
-		int pairs = numberOfApples / 2;
-		int apples = (numberOfApples % pairs) + pairs;
+		int pairs = products / grouping;
 		
-		BigDecimal applePrice = priceList.get("apple");
-		
-		for (int i = 0; i < apples; i++) {
-			total = total.add(applePrice);
+		for (int i = 0; i < pairs; i++) {
+			total = total.add(priceDiscount);
 		}
 		
 		return total;
+		
 	}
-	
-	private BigDecimal totalOranges() {
-		BigDecimal total = new BigDecimal("0.00");
-		int numberOfOranges = 0;
-		for (String item : items) {
-			if (item.equals("orange")) {
-				numberOfOranges++;
-			}
-		}
-		
-		if (numberOfOranges == 0) return total;
-		
-		int pairs = numberOfOranges / 3;
-		int oranges = (numberOfOranges % pairs) + pairs;
-		
-		BigDecimal orangePrice = priceList.get("orange");
-		orangePrice = orangePrice.add(orangePrice);
-		
-		for (int i = 0; i < oranges; i++) {
-			total = total.add(orangePrice);
-		}
-		
-		return total;
-	}
-	
 }
